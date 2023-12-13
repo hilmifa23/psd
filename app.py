@@ -1,8 +1,8 @@
-# Import library
+# Import libraries
 import streamlit as st
 import pandas as pd
 import joblib
-import numpy as np  # Import NumPy
+import numpy as np
 
 # Load KNN model
 knn_model = joblib.load('beasiswa.pkl')
@@ -39,6 +39,9 @@ if st.button("Prediksi"):
 
     # One-hot encode categorical variables
     input_data_encoded = pd.get_dummies(input_data_filled)
+
+    # Print input_data_encoded for debugging
+    st.write("Input Data Encoded:", input_data_encoded)
 
     # Melakukan prediksi
     hasil_prediksi = predict_beasiswa(input_data_encoded)
