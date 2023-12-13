@@ -1,7 +1,7 @@
 # Import library
 import streamlit as st
 import pandas as pd
-from sklearn.externals import joblib
+import joblib
 
 # Load model yang sudah dilatih
 model = joblib.load('model_beasiswa.pkl')
@@ -35,9 +35,6 @@ if st.button("Prediksi"):
 
     # Menampilkan hasil prediksi
     if hasil_prediksi[0] == 1:
-        st.success(f"Anda layak untuk menerima beasiswa!")
+        st.success(f"Mahasiswa dari {status_univ} dengan jenjang {jenjang}, akreditasi {akreditasi}, dan {kartu} kartu layak untuk menerima beasiswa!")
     else:
-        st.error(f"Anda tidak layak untuk menerima beasiswa.")
-
-# Catatan: Pastikan Anda memiliki file model_beasiswa.pkl yang sesuai dengan model machine learning Anda.
-
+        st.error(f"Mahasiswa dari {status_univ} dengan jenjang {jenjang}, akreditasi {akreditasi}, dan {kartu} kartu tidak layak untuk menerima beasiswa.")
