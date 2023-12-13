@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import numpy as np  # Import NumPy
 
 # Load KNN model
 knn_model = joblib.load('beasiswa.pkl')
@@ -33,8 +34,14 @@ if st.button("Prediksi"):
     # Ensure input data has the same columns and order as during training
     input_data = input_data[['Status_Univ', 'Jenjang', 'Akreditasi', 'Kartu']]
 
+    # Handle missing values by filling with the mean
+    input_data_filled = input_data.fillna(input_data.mean())
+
+    # One-hot encode categorical variables
+    input_data_encoded = pd.get_dummies(input_data_filled)
+
     # Melakukan prediksi
-    hasil_prediksi = predict_beasiswa(input_data)
+    hasil_prediksi = predict_beasiswa(input_data_encoded)
 
     # Menampilkan hasil prediksi
     if hasil_prediksi[0] == 1:
