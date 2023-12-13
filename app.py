@@ -3,12 +3,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load model yang sudah dilatih
-model = joblib.load('model_beasiswa.pkl')
+# Load KNN model
+knn_model = joblib.load('model_beasiswa_knn.pkl')
 
 # Fungsi untuk prediksi beasiswa
 def predict_beasiswa(data):
-    prediction = model.predict(data)
+    prediction = knn_model.predict(data)
     return prediction
 
 # Judul halaman web
