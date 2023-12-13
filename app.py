@@ -30,6 +30,9 @@ if st.button("Prediksi"):
         'Kartu': [kartu]
     })
 
+    # Ensure input data has the same columns and order as during training
+    input_data = input_data[['Status_Univ', 'Jenjang', 'Akreditasi', 'Kartu']]
+
     # Melakukan prediksi
     hasil_prediksi = predict_beasiswa(input_data)
 
