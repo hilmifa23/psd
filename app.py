@@ -49,7 +49,8 @@ if st.button("Prediksi"):
 
     # Ensure input_data_encoded has the same columns as during training
     # Use reindex to add missing columns (if any) with default values
-    input_data_encoded = input_data_encoded.reindex(columns=knn_model['columns'], fill_value=0)
+    columns_to_reindex = knn_model.get('columns', input_data_encoded.columns)
+    input_data_encoded = input_data_encoded.reindex(columns=columns_to_reindex, fill_value=0)
 
     # Print input_data_encoded for debugging
     st.write("Input Data Encoded:", input_data_encoded)
