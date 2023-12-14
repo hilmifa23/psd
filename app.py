@@ -4,7 +4,7 @@ import pandas as pd
 import joblib
 
 # Load KNN model
-knn_model = joblib.load('beasiswa.pkl')
+knn_model = joblib.load('model_knn.pkl')
 
 # Fungsi untuk prediksi beasiswa
 def predict_beasiswa(data):
