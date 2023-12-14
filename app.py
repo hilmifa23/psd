@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-import numpy as np
 
 # Load KNN model
 knn_model = joblib.load('beasiswa.pkl')
@@ -16,29 +15,41 @@ def predict_beasiswa(data):
 st.title("Aplikasi Prediksi Penerima Beasiswa")
 
 # Input data mahasiswa
-status_univ = st.selectbox("Status Universitas", ["PTN", "PTS Bojonegoro", "PTS Luar Bojonegoro"])
-jenjang = st.selectbox("Jenjang Mahasiswa", ["S1", "D4", "D3"])
-akreditasi = st.selectbox("Akreditasi Program Studi", ["A", "B", "C"])
-kartu = st.selectbox("Memiliki Kartu Mahasiswa", ["Ya", "Tidak"])
+status_univ_mapping = {"PTN": 1, "PTS Bojonegoro": 2, "PTS Luar Bojonegoro": 3}
+jenjang_mapping = {"S1": 1, "D4": 2, "D3": 3}
+akreditasi_mapping = {"A": 1, "B": 2, "C": 3}
+kartu_mapping = {"Ya": 1, "Tidak": 0}
+
+status_univ = st.selectbox("Status Universitas", list(status_univ_mapping.keys()))
+jenjang = st.selectbox("Jenjang Mahasiswa", list(jenjang_mapping.keys()))
+akreditasi = st.selectbox("Akreditasi Program Studi", list(akreditasi_mapping.keys()))
+kartu = st.selectbox("Memiliki Kartu Mahasiswa", list(kartu_mapping.keys()))
+
+# Konversi ke nilai numerik
+status_univ_numeric = status_univ_mapping[status_univ]
+jenjang_numeric = jenjang_mapping[jenjang]
+akreditasi_numeric = akreditasi_mapping[akreditasi]
+kartu_numeric = kartu_mapping[kartu]
 
 # Tombol untuk memprediksi
 if st.button("Prediksi"):
     # Mengumpulkan data untuk prediksi
     input_data = pd.DataFrame({
-        'Status_Univ': [status_univ],
-        'Jenjang': [jenjang],
-        'Akreditasi': [akreditasi],
-        'Kartu': [kartu]
+        'Status_Univ': [status_univ_numeric],
+        'Jenjang': [jenjang_numeric],
+        'Akreditasi': [akreditasi_numeric],
+        'Kartu': [kartu_numeric]
     })
 
-    # Ensure input data has the same columns and order as during training
-    input_data = input_data[['Status_Univ', 'Jenjang', 'Akreditasi', 'Kartu']]
-
     # Handle missing values by filling with the mean
-    input_data_filled = input_data.fillna(input_data.mean())
+    input_data_filled = input_data.apply(pd.to_numeric, errors='coerce').fillna(input_data.mean())
 
     # One-hot encode categorical variables
     input_data_encoded = pd.get_dummies(input_data_filled)
+
+    # Ensure input_data_encoded has the same columns as during training
+    # Use reindex to add missing columns (if any) with default values
+    input_data_encoded = input_data_encoded.reindex(columns=knn_model['columns'], fill_value=0)
 
     # Print input_data_encoded for debugging
     st.write("Input Data Encoded:", input_data_encoded)
