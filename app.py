@@ -1,4 +1,3 @@
-# Import libraries
 import streamlit as st
 import pandas as pd
 import joblib
@@ -40,6 +39,9 @@ if st.button("Prediksi"):
         'Akreditasi': [akreditasi_numeric],
         'Kartu': [kartu_numeric]
     })
+
+    # Ensure input_data has the same columns and order as during training
+    input_data = input_data[['Status_Univ', 'Jenjang', 'Akreditasi', 'Kartu']]
 
     # Handle missing values by filling with the mean
     input_data_filled = input_data.apply(pd.to_numeric, errors='coerce').fillna(input_data.mean())
